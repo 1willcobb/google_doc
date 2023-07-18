@@ -4,7 +4,6 @@ const Document = require("./Document")
 mongoose.connect('mongodb://localhost/docdb',
   {
     useNewUrlParser: true,
-    useUnifiedTopology: true
   }
 );
 
@@ -23,14 +22,15 @@ io.on("connection", socket => {
         socket.join(documentID)
         socket.emit('load-document', document.data)
 
-    socket.on('send-changes', delta => {
-        socket.broadcast.to(documentID).emit("receive-changes", delta)
+    
+        socket.on('send-changes', delta => {
+            socket.broadcast.to(documentID).emit("receive-changes", delta)
     })
 
     socket.on('save-document', async data => {
         await Document.findByIdAndUpdate(documentID, { data })
-    } )
     })
+})
     console.log("connected")
 })
 
