@@ -10,7 +10,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/docdb',
   }
 );
 
-const port = process.env.PORT || 3001;
+const port = process.env.PORT // || 3001;
 
 // Route handler for the root path ("/")
 app.get("/", (req, res) => {
