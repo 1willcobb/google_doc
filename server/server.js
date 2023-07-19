@@ -1,6 +1,7 @@
 const express = require("express");
-const mongoose = require("mongoose")
-const Document = require("./Document")
+const mongoose = require("mongoose");
+const Document = require("./Document");
+const path = require('path');
 
 const app = express();
 
@@ -10,7 +11,9 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/docdb',
   }
 );
 
-const port = process.env.PORT // || 3001;
+const port = process.env.PORT || 3001;
+const frontEndURL = process.env.FRONTEND_URL || 'http://localhost:3001'
+
 
 // Route handler for the root path ("/")
 app.get("/", (req, res) => {
@@ -19,7 +22,7 @@ app.get("/", (req, res) => {
 
 const io = require('socket.io')(port, {
     cors: {
-        origin: 'http://localhost:3000',
+        origin:frontEndURL,
         method: ['GET', 'POST']
     }
 })
@@ -51,6 +54,14 @@ async function findOrCreateDocument(id) {
     if (document) return document
     return await Document.create({_id: id, data: defaultValue})
 }
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, 'client', 'build')));
+
+// Route handler for the root path ("/") to serve the React app
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+});
 
 
 app.listen(port, () => {
