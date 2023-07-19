@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const Document = require("./Document");
 const path = require('path');
+const cors = require("cors");
 
 const app = express();
 
@@ -11,18 +12,19 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/docdb',
   }
 );
 
-const port = process.env.PORT || 3001;
-const frontEndURL = process.env.FRONTEND_URL || 'http://localhost:3001'
+const port = process.env.PORT || 3002;
+const socketPort = process.env.SOCKET_PORT || 3001; 
+const frontEndURL = process.env.FRONTEND_URL || 'http://localhost:3000'
 
+app.use(cors());
 
-// Route handler for the root path ("/")
-app.get("/", (req, res) => {
-    res.send("Hello, World!");
-  });
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
 
-const io = require('socket.io')(port, {
+const io = require('socket.io')(socketPort, {
     cors: {
-        origin:frontEndURL,
+        origin: frontEndURL ,
         method: ['GET', 'POST']
     }
 })
@@ -64,6 +66,3 @@ app.get('/', (req, res) => {
 });
 
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
