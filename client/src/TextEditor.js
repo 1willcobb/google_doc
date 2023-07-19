@@ -34,7 +34,7 @@ const TextEditor = () => {
   }, [socket, quill, documentID])
 
   useEffect(() => {
-    const s = (io("http://localhost:3001"))
+    const s = (io('https://git.heroku.com/google-doc-1willcobb.git' || 'http://localhost:3001'))
     setSocket(s)
 
     return () => {
