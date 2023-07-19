@@ -10,12 +10,14 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/docdb',
   }
 );
 
+const port = process.env.PORT || 3001;
+
 // Route handler for the root path ("/")
 app.get("/", (req, res) => {
     res.send("Hello, World!");
   });
 
-const io = require('socket.io')(process.env.PORT || 3001, {
+const io = require('socket.io')(port, {
     cors: {
         origin: 'http://localhost:3000',
         method: ['GET', 'POST']
@@ -50,7 +52,7 @@ async function findOrCreateDocument(id) {
     return await Document.create({_id: id, data: defaultValue})
 }
 
-const port = process.env.PORT || 3001;
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
