@@ -61,6 +61,8 @@ useEffect(() =>{
       socket.emit("send-changes", delta)
     }
 
+    
+
     quill.on('text-change', handler)
 
     return () => {
