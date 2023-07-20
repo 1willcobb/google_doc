@@ -58,11 +58,11 @@ async function findOrCreateDocument(id) {
 }
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, 'client', 'build')));
+app.use(express.static(path.join(__dirname, '../client/build')));
 
 // Route handler for the root path ("/") to serve the React app
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+  res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });
 
 
