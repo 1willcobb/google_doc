@@ -6,7 +6,8 @@
       "node": "18.16.0"
     },
     "scripts": {
-      "start": "node server/server.js"
+      "start": "node server/server.js",
+      "heroku-postbuild": "cd client && npm install && npm run build"
     },
     "dependencies": {
       "express": "^4.17.1",
