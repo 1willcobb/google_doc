@@ -34,8 +34,7 @@ const TextEditor = () => {
   }, [socket, quill, documentID])
 
   useEffect(() => {
-    const loc = window.location;
-    const s = (io(`${loc.protocol}//${loc.hostname}${loc.hostname === 'localhost' ? ':3000' : ''}`));
+    const s = (io(process.env.SOCKET_PORT || 'http://localhost:3001'))
     setSocket(s)
 
     return () => {

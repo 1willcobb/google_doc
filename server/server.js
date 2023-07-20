@@ -25,7 +25,7 @@ app.listen(port, () => {
 const io = require('socket.io')(socketPort, {
     cors: {
         origin: frontEndURL ,
-        method: ['GET', 'POST']
+        methods: ['GET', 'POST']
     }
 })
 
