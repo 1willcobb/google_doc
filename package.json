@@ -6,7 +6,7 @@
       "node": "18.16.0"
     },
     "scripts": {
-      "start": "cd server && node server.js",
+      "start": "node server/server.js",
       "client": "cd client && npm start",
       "heroku-postbuild": "cd client && npm install && npm run build"
     },
