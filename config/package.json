@@ -1,3 +1,4 @@
 {
-    "domain": "https://google-clone-1willcobb-v3-46671173cb17.herokuapp.com"
+    "domain": "https://google-clone-1willcobb-v3-46671173cb17.herokuapp.com",
+    "NPM_CONFIG_PRODUCTION": "false"
 }
