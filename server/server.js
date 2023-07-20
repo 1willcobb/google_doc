@@ -6,55 +6,51 @@ const cors = require("cors");
 
 const app = express();
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/docdb',
-  {
-    useNewUrlParser: true,
-  }
-);
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/docdb', {
+  useNewUrlParser: true,
+});
 
-const port = process.env.PORT || 3002;
-const socketPort = process.env.SOCKET_PORT || 3001; 
+const port = process.env.PORT || 3001;
 const frontEndURL = process.env.FRONTEND_URL || 'http://localhost:3000'
 
 app.use(cors());
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
-const io = require('socket.io')(socketPort, {
-    cors: {
-        origin: frontEndURL ,
-        methods: ['GET', 'POST']
-    }
-})
+const io = require('socket.io')(server, { // Use the server instance as the first argument
+  cors: {
+    origin: frontEndURL,
+    methods: ['GET', 'POST']
+  }
+});
 
-const defaultValue = ""
+const defaultValue = "";
 
 io.on("connection", socket => {
-    socket.on('get-document', async documentID => {
-        const document = await findOrCreateDocument(documentID)
-        socket.join(documentID)
-        socket.emit('load-document', document.data)
+  socket.on('get-document', async documentID => {
+    const document = await findOrCreateDocument(documentID);
+    socket.join(documentID);
+    socket.emit('load-document', document.data);
 
-    
-        socket.on('send-changes', delta => {
-            socket.broadcast.to(documentID).emit("receive-changes", delta)
-    })
+    socket.on('send-changes', delta => {
+      socket.broadcast.to(documentID).emit("receive-changes", delta);
+    });
 
     socket.on('save-document', async data => {
-        await Document.findByIdAndUpdate(documentID, { data })
-    })
-})
-    console.log("connected")
-})
+      await Document.findByIdAndUpdate(documentID, { data });
+    });
+  });
+  console.log("connected");
+});
 
 async function findOrCreateDocument(id) {
-    if (id == null) return
+  if (id == null) return;
 
-    const document = await Document.findById(id)
-    if (document) return document
-    return await Document.create({_id: id, data: defaultValue})
+  const document = await Document.findById(id);
+  if (document) return document;
+  return await Document.create({ _id: id, data: defaultValue });
 }
 
 // Serve static files from the React app
@@ -64,5 +60,3 @@ app.use(express.static(path.join(__dirname, '../client/build')));
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });
-
-
