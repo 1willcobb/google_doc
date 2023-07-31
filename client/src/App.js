@@ -6,8 +6,15 @@ import {
   Redirect
 } from 'react-router-dom'
 import { v4 as uuidV4 } from 'uuid'
+import RegisterForm from "./RegisterForm";
+import LoginForm from "./LoginForm";
+import { useState } from "react";
+
 
 function App() {
+  const [token, setToken] = useState("");
+
+
   return (
   <Router>
     <Switch>
@@ -15,6 +22,8 @@ function App() {
         <Redirect to={`/documents/${uuidV4()}`} />
       </Route>
       <Route path="/documents/:id">
+        <LoginForm />   
+        <RegisterForm />
         <TextEditor />
       </Route>
     </Switch>
